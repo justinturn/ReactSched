@@ -1,30 +1,62 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
+import * as React from 'react';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import TableExample from './component/Grid';
 
-export default function App() {
+function Profile({ navigation }) {
   return (
-    <View style={styles.container}>
- <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: 'https://axhaircoolers.com/wp-content/uploads/2022/01/Air-Coolers-Logo-a1.18.05.jpg',
-        }}
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Profile Screen</Text>
+      <Button
+        onPress={() => navigation.navigate('EditPost')}
+        title="Go to Edit Post"
       />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tinyLogo: {
-    width: 200,
-    height: 50,
-  },
-});
+function EmptyScreen() {
+  return <View />;
+}
 
+function GenerateGrid() {
+    return <View>
+        <TableExample></TableExample>
+    </View>
+    
+    //Need to add grid here
+
+  }
+
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function Home() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Settings" component={EmptyScreen} />
+      <Tab.Screen name="Schedule" component={GenerateGrid} />
+
+    </Tab.Navigator>
+  );
+}
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="EditPost" component={EmptyScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
