@@ -1,73 +1,54 @@
 import * as React from 'react';
 import { DataTable } from 'react-native-paper';
 
-const DatatableComponent = () => {
-  const {page, setPage} = React.useState<Number>(0);
-  const [numberOfItemsPerPageList] = React.useState([5,10,20,50]);
-  const [itemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[1]
-  );
+const numberOfItemsPerPageList = [12, 25, 50];
+const formatAsCurrency = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',})
 
-  const [items] = React.useState([
-   {
-     key: 1,
-     name: 'Cupcake',
-     calories: 356,
-     fat: 16,
-   },
-   {
-     key: 2,
-     name: 'Eclair',
-     calories: 262,
-     fat: 16,
-   },
-   {
-     key: 3,
-     name: 'Frozen yogurt',
-     calories: 159,
-     fat: 6,
-   },
-   {
-     key: 4,
-     name: 'Gingerbread',
-     calories: 305,
-     fat: 3.7,
-   },
-  ]);
+const MyComponent = () => {
 
-  const api_url = "http://localhost:3000/schedule";
-  const [AXHitems, setData] = React.useState([])
+  ////////////////////////////////////Load AXH DATA//
+const api_url = "http://localhost:3000/schedule";
+const [AXHitems, setData] = React.useState([])
 
-  //Fetchinfo callback
-  const fetchInfo = () => { 
-    return fetch(api_url) 
-            .then((res) => res.json()) 
-            .then((d) => setData(d)) 
-    }
-    
-    React.useEffect(() => {
-      fetchInfo();
-    }, [])
-  // const from = page * itemsPerPage;
-  // const to = Math.min((page + 1) * itemsPerPage, items.length);
-  const from = 0;
-  const to = 10;
-
-  // React.useEffect(() => {
-  //   setPage(0);
-  // }, [itemsPerPage]);
+//Fetchinfo callback
+const fetchInfo = () => { 
+  return fetch(api_url) 
+          .then((res) => res.json()) 
+          .then((d) => setData(d)) 
+  }
   
+  //Load Data
+  React.useEffect(() => {
+    fetchInfo();
+  }, [])
+
+/////////////////////////////////////////////////////////END LOAD//
+
+  const [page, setPage] = React.useState(0);
+  const [numberOfItemsPerPage, onItemsPerPageChange] = React.useState(numberOfItemsPerPageList[0]);
+  const from = page * numberOfItemsPerPage;
+  const to = Math.min((page + 1) * numberOfItemsPerPage, AXHitems.length);
+  let DollarSum = 0
+  
+  AXHitems.slice(from, to).map((item) => (DollarSum += item.netPrice))
+
+
+  React.useEffect(() => {
+     setPage(0);
+  }, [numberOfItemsPerPage]);
+
   return (
     <DataTable>
-      <DataTable.Header>
-        <DataTable.Title>Job</DataTable.Title>
+            <DataTable.Header>
+        <DataTable.Title  sortDirection='ascending' >Job</DataTable.Title>
         <DataTable.Title numeric>Customer</DataTable.Title>
         <DataTable.Title numeric>Model</DataTable.Title>
-        <DataTable.Title numeric>MFG Ship Date</DataTable.Title>
+        <DataTable.Title numeric >MFG Ship Date</DataTable.Title>
         <DataTable.Title numeric>Net Price</DataTable.Title>
       </DataTable.Header>
-
-
+      {/* rows */}
       {AXHitems.slice(from, to).map((item) => (
         <DataTable.Row key={item.jobNum}>
           <DataTable.Cell>{item.jobNum}</DataTable.Cell>
@@ -80,17 +61,20 @@ const DatatableComponent = () => {
 
       <DataTable.Pagination
         page={page}
-        numberOfPages={Math.ceil(items.length / itemsPerPage)}
-        onPageChange={(page) => setPage(page)}
-        label={`${from + 1}-${to} of ${items.length}`}
-        numberOfItemsPerPageList={numberOfItemsPerPageList}
-        numberOfItemsPerPage={itemsPerPage}
-        onItemsPerPageChange={onItemsPerPageChange}
+        numberOfPages={Math.ceil(AXHitems.length / numberOfItemsPerPage)}
+        onPageChange={page => setPage(page)}
+        label={`${from + 1}-${to} of ${AXHitems.length}`}
         showFastPaginationControls
-        selectPageDropdownLabel={'Rows per page'}
+        numberOfItemsPerPageList={numberOfItemsPerPageList}
+        //numberOfItemsPerPage={numberOfItemsPerPage}
+        onItemsPerPageChange={onItemsPerPageChange}
+        //selectPageDropdownLabel={'Rows per page'}
       />
+      <DataTable.Header>
+        Net Price Total: {formatAsCurrency.format(DollarSum)}
+      </DataTable.Header>
     </DataTable>
   );
 };
 
-export default DatatableComponent;
+export default MyComponent;

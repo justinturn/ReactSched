@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button, View, Text, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TableExample from './Grid';
-import DatatableComponent from './DatatableComp'
+import MyComponent from './DatatableComp'
 import FlatListBasics from './List';
 import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
@@ -36,7 +36,7 @@ function Profile({ navigation }) {
     }
   function GenerateGrid2() {
   return      <View>
-  <DatatableComponent></DatatableComponent>
+  <MyComponent></MyComponent>
   </View>
   }
   
