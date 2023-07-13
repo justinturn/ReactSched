@@ -3,54 +3,24 @@ import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import DatatableComponent from './component/DatatableComp'
+import FlatListBasics from './component/List';
+import { Ionicons } from '@expo/vector-icons';
+import NavComponent from './component/BottomNav';
 import TableExample from './component/Grid';
-
-function Profile({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Profile Screen</Text>
-      <Button
-        onPress={() => navigation.navigate('EditPost')}
-        title="Go to Edit Post"
-      />
-    </View>
-  );
-}
 
 function EmptyScreen() {
   return <View />;
 }
 
-function GenerateGrid() {
-    return <View>
-        <TableExample></TableExample>
-    </View>
-    
-    //Need to add grid here
-
-  }
-
-const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
-function Home() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="Settings" component={EmptyScreen} />
-      <Tab.Screen name="Schedule" component={GenerateGrid} />
-
-    </Tab.Navigator>
-  );
-}
-
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+            <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={Home}
+          component={NavComponent}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="EditPost" component={EmptyScreen} />

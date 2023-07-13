@@ -3,7 +3,6 @@ import { DataTable } from 'react-native-paper';
 
 
 
-
 const TableExample = () => {
 const api_url = "http://localhost:3000/schedule";
 //const api_url = "https://jsonplaceholder.typicode.com/users";
@@ -40,7 +39,9 @@ return(
                 marginBlock: 10,
               }}
             >
+              <p style={{ fontSize: 12, color: 'black' }}>{new Date(dataObj.MfgShipDate).toLocaleDateString()}</p>
               <p style={{ fontSize: 20, color: 'black' }}>{dataObj.jobNum}</p>
+              <p style={{ fontSize: 12, color: 'black' }}>{"$" + dataObj.netPrice}</p>
             </div>
           );
         })}
